@@ -1,0 +1,38 @@
+select  '5%' as 'Raise percentage', employee_id, salary,   (salary * 5.0 / 100.0)  as raise   from employees  
+ where department_id in(10,30)
+
+ union
+  
+  select   '10%' as 'Raise percentage', employee_id,  salary,   (salary * 10.0 / 100.0)  as raise   from employees  
+ where department_id =20
+ union
+
+  select   '15%' as 'Raise percentage', employee_id, salary,    (salary * 15.0 / 100.0)  as raise   from employees  
+ where department_id in(40,50)
+
+ union
+
+  select   'No Raise' as 'Raise percentage', employee_id, salary,    (salary * 0.0 / 100.0)  as raise   from employees  
+ where department_id =60
+
+
+
+select top 3 salary,last_name from 
+
+(
+select top 3 salary,last_name from employees order by salary desc
+
+)TEMP order by salary 
+
+
+ select last_name as employeename,salary,isnull(commission_pct,0) as commission from employees
+
+
+  select * from (
+select top 3 emp.last_name,emp.employee_id,manager.last_name as 'Manager Name',emp.salary from employees emp 
+inner join employees manager on  emp.manager_id=  manager.employee_id  inner join
+departments dp on dp.department_id=emp.department_id order by emp.salary  desc ) temp order by salary 
+
+
+
+ select LAST_name,salary from employees   where manager_id in (select employee_id from employees where last_name ='Russell')
