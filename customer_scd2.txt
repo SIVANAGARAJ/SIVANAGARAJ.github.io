@@ -1,0 +1,72 @@
+ 
+            MERGE Customer_SCD2 AS [Target] -- begin merge statements (merge statements end with a semi-colon)
+            USING SRC_Customer  AS [Source]
+            ON [Target].[CustomerId] = [Source].[CustomerId] AND [Target].[Flag] = 1
+            WHEN MATCHED AND -- record exists but values are different
+            (
+                  [Target].CompanyName <> [Source].CompanyName
+                  OR [Target].ContactName <> [Source].ContactName
+                  OR [Target].ContactTitle <> [Source].ContactTitle
+                  OR [Target].Address <> [Source].Address
+				  OR [Target].City <> [Source].City
+                  OR [Target].Region <> [Source].Region
+                  OR [Target].PostalCode <> [Source].PostalCode
+				  OR [Target].Country <> [Source].Country
+				  OR [Target].Phone <> [Source].Phone
+                  OR [Target].Fax <> [Source].Fax
+                  
+            )
+            THEN UPDATE SET -- update records (Type 1 means record values are overwritten)
+                  [Target].[Flag] = 0,
+				  [Target].CompanyName = [Source].CompanyName,
+                    [Target].ContactName = [Source].ContactName,
+                    [Target].ContactTitle = [Source].ContactTitle,
+                    [Target].Address = [Source].Address,
+				    [Target].City = [Source].City,
+                    [Target].Region = [Source].Region,
+                    [Target].PostalCode = [Source].PostalCode,
+				    [Target].Country = [Source].Country,
+				    [Target].Phone = [Source].Phone,
+                    [Target].Fax = [Source].Fax,
+                    [Target].[End Date] = GETDATE()
+            WHEN NOT MATCHED BY TARGET-- record does not exist
+            THEN INSERT -- insert record
+            (
+			CustomerID,
+			CompanyName,
+			ContactName,
+			ContactTitle,
+			Address,
+			City,
+			Region,
+			PostalCode,
+			Country,
+			Phone,
+			Fax,
+			[Version],
+			  StartDate,
+			  [End Date],
+			   [Flag]
+            )
+            VALUES
+            (
+                  [Source].CustomerID
+                  , [Source].CompanyName
+                  , [Source].ContactName
+                  , [Source].ContactTitle,
+				   [Source].Address
+                  , [Source].City
+                  , [Source].Region
+                  , [Source].PostalCode
+				   , [Source].Country
+                  , [Source].Phone
+                  , [Source].Fax,
+				  (select isnull((max(version)+1),1) from Customer_SCD2),
+				   getdate(),
+				   getdate(),
+                  1
+            )
+            WHEN NOT MATCHED BY SOURCE -- record exists in target but not source
+            THEN DELETE; -- delete from target
+          
+     --https://www.catapultsystems.com/blogs/using-sql-merge-for-etl-type-1-and-type-2-incremental-loading/
