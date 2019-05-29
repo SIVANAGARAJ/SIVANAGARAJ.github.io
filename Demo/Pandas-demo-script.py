@@ -1,0 +1,350 @@
+Pandas code
+
+## ---(Thu May 24 21:39:04 2018)---
+import pandas as pd
+import numpy as np
+data = np.array(['a','b','c','d'])
+s = pd.Series(data)
+print(s)
+
+import pandas as pd
+print(pd.__version__)
+
+# add index
+import pandas as pd
+import numpy as np
+data = np.array(['a','b','c','d'])
+s = pd.Series(data,index=[100,101,102,103])
+print(s)
+
+# dict
+import pandas as pd
+import numpy as np
+data = {'a' : 0., 'b' : 1., 'c' : 2.}
+s = pd.Series(data)
+print(s)
+
+# repeat a number
+import pandas as pd
+import numpy as np
+s = pd.Series(5, index=[0, 1, 2, 3])
+print(s)
+
+#retrieve the element
+import pandas as pd
+s = pd.Series([1,2,3,4,5],index = ['a','b','c','d','e'])
+print(s[3])
+print(s[0])
+
+#slicing - retrieve the last three element
+import pandas as pd
+s = pd.Series([1,2,3,4,5],index = ['a','b','c','d','e'])
+print(s[-3:])
+
+#retrieve multiple elements
+import pandas as pd
+s = pd.Series([1,2,3,4,5],index = ['a','b','c','d','e'])
+print(s[['a','c','d']])
+
+#DataFrame
+import pandas as pd
+data = [1,2,3,4,5]
+df = pd.DataFrame(data)
+print(df)
+
+#DataFrame table
+import pandas as pd
+data = [['Alex',10],['Bob',12],['Clarke',13]]
+df = pd.DataFrame(data,columns=['Name','Age'])
+print(df)
+
+#DataFrame & datatype - float
+import pandas as pd
+data = [['Alex',10],['Bob',12],['Clarke',13]]
+df = pd.DataFrame(data,columns=['Name','Age'],dtype=float)
+print(df)
+
+#passing df
+import pandas as pd
+data = {'Name':['Tom', 'Jack', 'Steve', 'Ricky'],'Age':[28,34,29,42]}
+df = pd.DataFrame(data)
+print(df)
+
+#passing df
+import pandas as pd
+data = {'Name':['Tom', 'Jack', 'Steve', 'Ricky'],'Age':[28,34,29,42]}
+df = pd.DataFrame(data, index=['rank1','rank2','rank3','rank4'])
+print(df)
+
+#if 3rd element is missing
+import pandas as pd
+data = [{'a': 1, 'b': 2},{'a': 5, 'b': 10, 'c': 20}]
+df = pd.DataFrame(data)
+print(df)
+
+#create 2 columns
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
+      'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
+df = pd.DataFrame(d)
+print(df)
+
+#add a column and print
+import pandas as pd
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
+      'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
+df = pd.DataFrame(d)
+df
+df['three']=pd.Series([10,20,30],index=['a','b','c'])
+df['three']
+df['four']=df['one']+df['three']
+print(df)
+
+#display 1 column alone
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
+      'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
+df = pd.DataFrame(d)
+print(df)
+print(df ['one'])
+
+#del a column 
+import pandas as pd
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']), 
+     'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd']), 
+     'three' : pd.Series([10,20,30], index=['a','b','c'])}
+df = pd.DataFrame(d)
+print(df)
+del df['one']
+print(df)
+df.pop('two')
+print(df)
+
+import pandas as pd
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']), 
+     'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
+df = pd.DataFrame(d)
+print(df)
+print(df.loc['b'])
+
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
+     'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
+df = pd.DataFrame(d)
+df
+print(df.iloc[2])
+print(df.iloc[0])
+
+#display value within a range
+import pandas as pd
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']), 
+    'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
+df = pd.DataFrame(d)
+print(df[2:4])
+
+#append 
+df = pd.DataFrame([[1, 2], [3, 4]], columns = ['a','b'])
+df2 = pd.DataFrame([[5, 6], [7, 8]], columns = ['a','b'])
+df = df.append(df2)
+df
+
+#drop zero
+df = pd.DataFrame([[1, 2], [3, 4]], columns = ['a','b'])
+df2 = pd.DataFrame([[5, 6], [7, 8]], columns = ['a','b'])
+df = df.append(df2)
+df = df.drop(0)
+print(df)
+
+#random gen & rename a column and index
+import pandas as pd
+import numpy as np
+df1 = pd.DataFrame(np.random.randn(6,3),columns=['col1','col2','col3'])
+print(df1)
+print(df1.rename(columns={'col1' : 'c1', 'col2' : 'c2'},
+index = {0 : 'apple', 1 : 'banana', 2 : 'cabbage'}))
+
+# rename
+import pandas as pd
+import numpy as np
+df1 = pd.DataFrame(np.random.randn(6,3),columns=['col1','col2','col3'])
+print(df1)
+print(df1.rename(columns={'col1' : 'c1', 'col2' : 'c2'},
+index = {0 : '10011', 1 : '10012', 2 : '10013'}))
+
+#create a Series
+import pandas as pd
+import numpy as np
+s = pd.Series(['Tom', 'William Rick', 'John', 'Alber@t', np.nan, '1234','SteveSmith'])
+print(s)
+
+#lower
+print(s.str.lower())
+
+#upper()
+print(s.str.upper())
+
+#len
+print(s.str.len())
+
+#dummies()
+import pandas as pd
+import numpy as np
+s = pd.Series(['Tom ', ' William Rick', 'John', 'Alber@t'])
+print(s.str.get_dummies())
+
+#replace
+print(s.str.replace('@','$'))
+
+#repeat
+print(s.str.repeat(2))
+
+#count
+print(s.str.count('m'))
+
+#find
+print(s.str.find('e'))
+
+
+#date index
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.randn(10, 4),
+index = pd.date_range('1/1/2000', periods=10),
+columns = ['A', 'B', 'C', 'D'])
+print(df)
+
+#Missing Values
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.randn(5, 3), index=['a', 'c', 'e', 'f','h'],
+                  columns=['one', 'two', 'three'])
+df = df.reindex(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+print(df)
+
+#Check
+print(df['one'])
+print(df['one'].isnull())
+print(df['one'].notnull())
+
+#Calculations column 1
+print(df['one'].sum())
+
+#fill
+print(df.fillna(0))
+
+#Drop Missing Values
+print(df.dropna())
+
+#Replace
+import pandas as pd
+import numpy as np
+df = pd.DataFrame({'one':[10,20,30,40,50,2000],
+'two':[1000,0,30,40,50,60]})
+print(df)
+print(df.replace({1000:10,2000:60}))
+
+#create two different DataFrames and perform the merging operations.
+import pandas as pd
+left = pd.DataFrame({
+         'id':[1,2,3,4,5],
+         'Name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'],
+         'subject_id':['sub1','sub2','sub4','sub6','sub5']})
+right = pd.DataFrame(
+         {'id':[1,2,3,4,5],
+         'Name': ['Billy', 'Brian', 'Bran', 'Bryce', 'Betty'],
+         'subject_id':['sub2','sub4','sub3','sub6','sub5']})
+print(left)
+print(right)
+
+#Merge Two DataFrames on a Key
+import pandas as pd
+left = pd.DataFrame({
+         'id':[1,2,3,4,5],
+         'Name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'],
+         'subject_id':['sub1','sub2','sub4','sub6','sub5']})
+right = pd.DataFrame(
+         {'id':[1,2,3,4,5],
+         'Name': ['Billy', 'Brian', 'Bran', 'Bryce', 'Betty'],
+         'subject_id':['sub2','sub4','sub3','sub6','sub5']})
+print(pd.merge(left,right,on='id'))
+
+
+#create two different DataFrames and perform merge operations.
+import pandas as pd
+left = pd.DataFrame({
+         'id':[1,2,3,4,5],
+         'Name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'],
+         'subject_id':['sub1','sub2','sub4','sub6','sub5']})
+
+right = pd.DataFrame(
+         {'id':[1,2,3,4,5],
+         'Name': ['Billy', 'Brian', 'Bran', 'Bryce', 'Betty'],
+         'subject_id':['sub2','sub4','sub3','sub6','sub5']})
+
+print(left)
+print(right)
+
+#Merge Two DataFrames on Multiple Keys
+print(pd.merge(left,right,on=['id','subject_id']))
+
+# Concatenating 
+import pandas as pd
+one = pd.DataFrame({
+         'Name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'],
+         'subject_id':['sub1','sub2','sub4','sub6','sub5'],
+         'Marks_scored':[98,90,87,69,78]},
+         index=[1,2,3,4,5])
+
+two = pd.DataFrame({
+         'Name': ['Billy', 'Brian', 'Bran', 'Bryce', 'Betty'],
+         'subject_id':['sub2','sub4','sub3','sub6','sub5'],
+         'Marks_scored':[89,80,79,97,88]},
+         index=[1,2,3,4,5])
+print(pd.concat([one,two]))
+
+#time-series
+import pandas as pd
+print(pd.datetime.now())
+
+#Converting to Timestamps
+import pandas as pd
+print(pd.to_datetime(pd.Series(['Jul 31, 2009','2010-01-10', None])))
+
+#Plot
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.rand(10,4),columns=['a','b','c','d'])
+df.plot.bar()
+
+#stack
+import pandas as pd
+df = pd.DataFrame(np.random.rand(10,4),columns=['a','b','c','d'])
+df.plot.bar(stacked=True)
+
+#area
+df = pd.DataFrame(np.random.rand(10, 4), columns=['a', 'b', 'c', 'd'])
+df.plot.area()
+
+#pie
+df = pd.DataFrame(3 * np.random.rand(4), index=['a', 'b', 'c', 'd'], columns=['x'])
+df.plot.pie(subplots=True)
+
+#consider s.no as index column
+import pandas as pd
+from pandas import ExcelWriter
+from pandas import ExcelFile
+df = pd.read_excel("C:/Users/CAIA/Desktop/sample.xlsx", sheetname='Sheet1')
+df = pd.read_excel("C:/Users/bmurali/Desktop/sample.xlsx", sheetname='Sheet1')
+print(df.columns)
+
+#read csv
+import pandas as pd
+df=pd.read_csv("C:/Users/CAIA/Desktop/Book1.csv")
+df=pd.read_csv("C:/Users/bmurali/Desktop/Book1.csv")
+print(df)
+
+#header names
+df=pd.read_csv("C:/Users/CAIA/Desktop/Book1.csv", names=['a', 'b', 'c','d','e'])
+print(df)
+
+#skip rows
+df=pd.read_csv("C:/Users/CAIA/Desktop/Book1.csv", skiprows=2)
+print(df)
+
