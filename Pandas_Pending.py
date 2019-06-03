@@ -248,14 +248,198 @@ print(s.diff().diff().tolist())
 
 ###16. Use this dataset
 
-filename=(r'https://github.com/selva86/datasets/blob/master/iris_test.csv')
+## a.) Rename the column Type as CarType in df and replace the ‘.’ in column names with ‘_’.
 
+df = pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv')
+
+df = df.rename(columns = {'Type': 'CarType'})
+
+###or
+
+df.columns.values[2] = "CarType"
+
+df.columns = df.columns.map(lambda x: x.replace('.','_'))
+print(df.columns)
+
+### b.)Check if a data frame has any missing values
+
+df = pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv')
+
+df.isnull().values.any()
+
+## c.) Count the number of missing values in each column
+
+df = pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv')
+
+n_missings_each_col = df.apply(lambda x: x.isnull().sum())
+print(n_missings_each_col)
+
+## d.) Replace missing values of multiple numeric columns with the mean
+
+df = pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv')
+
+df_out = df[['Price', 'Length']] = df[['Price', 'Length']].apply(lambda x: x.fillna(x.mean()))
+
+print(df_out.head())
+
+### otherwise can use columns 'Min.Price' & 'Max.Price' ###
+
+### e.) Select a specific column from a data frame as a data frame instead of a series
+
+df = pd.DataFrame(np.arange(20).reshape(-1, 5), columns=list('vijay'))
+
+type(df[['a']])
+type(df.loc[:, ['a']])
+type(df.iloc[:, [3]])
+
+type(df.a)
+type(df['a'])
+type(df.loc[:, 'a'])
+type(df.iloc[:, 4])
+
+### f.) Change the order of columns of a data frame
+
+df = pd.DataFrame(np.arange(20).reshape(-1, 5), columns=list('vijay'))
+
+df[list('jivay')]
+
+def switch_columns(df, col1=None, col2=None):
+    colnames = df.columns.tolist()
+    i1, i2 = colnames.index(col1), colnames.index(col2)
+    colnames[i2], colnames[i1] = colnames[i1], colnames[i2]
+    return df[colnames]
+df1 = switch_columns(df, 'v', 'j')
+
+df[sorted(df.columns)]
+
+### g.) Set the number of rows and columns displayed in the output
+
+df = pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv')
+pd.set_option('display.max_columns', 10)
+pd.set_option('display.max_rows', 10)
+df
+
+## h.) Format all the values in a data frame as percentages
+
+df = pd.DataFrame(np.random.random(5), columns=['random'])
+df
+df['random'].map(lambda n:'{:.2%}'.format(n))
+
+
+##i.) Reverse the rows of a data frame
+
+df = pd.DataFrame(np.arange(25).reshape(5, -1))
+
+df.iloc[::-1, :]
+
+### 17. Replace both values in both diagonals of df with 0.
+
+df = pd.DataFrame(np.random.randint(1,100, 100).reshape(10, -1))
+df
+for i in range(df.shape[0]):
+    df.iat[i, i] = 0
+    df.iat[df.shape[0]-i-1, i] = 0
+    print(df)
+
+18.Use Iris dataset 
 import pandas as pd
-f=pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv')
-f.describe
+import numpy as np
+colnames=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
+iris = pd.read_csv(r'C:\Users\Training28/IRIS.csv',names=colnames)
+ 
+a) Set the values of the rows 10 to 29 of the column 'petal_length' to NaN & substitute the NaN values to 1.0 
+
+iris.describe()
+iris.head(3)
+pd.Index(iris)
+iris['petal_length'].loc[10:29]=np.nan
+iris['petal_length'].loc[10:29]=float(1.0)
+iris['petal_length'].loc[10:29]
 
     
+    
+b) delete the column class, Set the first 3 rows as NaN , Delete the rows that have NaN , Reset the index so it begins with 0 again
+iris.reindex=(['a','b','c'])
 
+    
+    
+    
+19. Create the 3 Data Frames based on the following raw data
+raw_data_1 = { 'subject_id': ['1', '2', '3', '4', '5'], 'first_name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'], 'last_name': ['Anderson', 'Ackerman', 'Ali', 'Aoni', 'Atiches']}
+raw_data_2 = { 'subject_id': ['4', '5', '6', '7', '8'], 'first_name': ['Billy', 'Brian', 'Bran', 'Bryce', 'Betty'], 'last_name': ['Bonder', 'Black', 'Balwner', 'Brice', 'Btisan']}
+raw_data_3 = { 'subject_id': ['1', '2', '3', '4', '5', '7', '8', '9', '10', '11'], 'test_id': [51, 15, 15, 61, 16, 14, 15, 1, 61, 16]}
+
+
+a) Join the two data frames along rows and assign all_data 
+
+# we cannot directly join,merge or concat using a dictionary data. 
+# have to converte to dataframe then only we can do that
+
+raw1=pd.DataFrame(raw_data_1)    
+print(raw1)
+
+raw2=pd.DataFrame(raw_data_2)
+raw3=pd.DataFrame(raw_data_3)
+
+all_data = pd.merge(left=raw1, right=raw2,
+how='outer', left_index=False,
+right_index=False)
+
+result1 = pd.merge(raw1, raw2, on='subject_id') #Displays merged data which is matching only 
+print(result1)
+
+all_data = raw1.append(raw2, ignore_index=True)
+
+# without using the pd values - from dictionary and output dictionary    
+z = {**raw_data_1, **raw_data_2}    
+print(z)    
+
+from collections import defaultdict
+
+all_data = defaultdict(list)
+
+for all_data in (raw_data_1, raw_data_2):
+    for key, value in all_data.items():
+        all_data[key].append(value)   
+
+print(all_data)    
+
+b) Join the two data frames along columns and assing to all_data_col 
+    
+
+
+all_data_col = pd.merge(left=raw1, right=raw2,
+how='left', left_on='subject_id',
+right_on='subject_id')
+
+df_new = raw1.join(other=raw2, on='subject_id',
+how='outer')    
+
+df = raw1.append([raw1, raw2])
+    
+c) Merge all data and data3 along the subject_id value 
+
+df_new = pd.merge(left=raw1, right=raw3,
+how='right', left_on='subject_id',
+right_on='subject_id')
+
+
+d) Merge only the data that has the same 'subject_id' on both data1 and data2
+
+df1_new = pd.merge(left=raw1, right=raw2,
+how='inner', left_on='subject_id',
+right_on='subject_id')
+
+
+
+e) Merge all values in data1 and data2, with matching records from both sides where available.
+    
+from sklearn.datasets import load_iris
+iris = load_iris()
+iris.keys()
+iris.feature_names
+
+   
 
 
 
