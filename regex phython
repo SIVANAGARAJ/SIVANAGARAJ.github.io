@@ -1,0 +1,137 @@
+ 
+
+--matching pattern
+
+import re
+
+pattern = '^a...s$'
+test_string = 'abyss'
+result = re.match(pattern, test_string)
+
+if result:
+  print("Search successful.")
+else:
+  print("Search unsuccessful.")	
+  
+  --matching string
+  
+  
+  import re
+patterns = 'software testing' 
+text = "software testing is a fun"
+if re.search(patterns,text):
+    	print('found')
+else:
+    	print('not found')
+
+
+  --matching flag
+import re
+xx = """guru99 
+careerguru99	
+selenium"""
+k1 = re.findall(r"^\w", xx)
+k2 = re.findall(r"^\w", xx, re.MULTILINE)
+print(k1)
+print(k2)
+
+
+
+---small program to use 
+
+
+ 
+import re
+
+exampleString = "Jessica is 15 years old, and Daniel is 27 years old.Edward is 97 years old, and his grandfather, Oscar, is 10888824"
+ages = re.findall(r'\d{1,3}',exampleString)
+names = re.findall(r'[A-Z][a-z]*',exampleString)
+
+print(ages)
+print(names)
+
+search a string
+
+
+import re
+
+string = "Python is fun"
+
+# check if 'Python' is at the beginning
+match = re.search('\APython', string)
+
+if match:
+  print("pattern found inside the string")
+else:
+  print("pattern not found")  
+  
+  
+  --searching pattern
+  pattern = 'a...s$'
+test_string = 'abyss'
+result = re.search(pattern, test_string)
+
+if result:
+  print("Search successful.")
+else:
+  print("Search unsuccessful.")	
+  
+  
+  
+ --searching flags 
+  
+import re
+
+x1 = re.search(r"\w+", u"♥αβγ!", re.U)
+x2 = re.search(r"\w+", u"♥αβγ!")
+
+if x1:
+    print x1.group().encode("utf8") # → 「αβγ」
+else:
+    print "no match"
+	
+--search replace a string
+	
+import re	
+	
+text = "The film Pulp Fiction was released in year 1994"  
+result = re.sub(r"Pulp Fiction", "Forrest Gump", text)  
+print (result)
+	
+	--search replace with pattern
+	
+	import re
+
+bold = re.compile(r'\*{2}(.*?)\*{2}', re.UNICODE)
+
+text = 'Make this **bold**.  This **too**.'
+
+print ('Text:', text)
+print ('Bold:', bold.sub(r'<b>\1</b>', text))
+
+
+
+
+	--search replace with flags
+	
+ import re
+ insensitive_hippo = re.compile(re.escape('hippo'), re.IGNORECASE)
+ insensitive_hippo.sub('giraffe', 'I want a hIPpo for my birthday')
+
+
+ 
+ --sample pattern program
+ 
+ 
+ import re
+
+exampleString = "Jessica is 15 years old, and Daniel is 27 years old.Edward is 97 years old, and his grandfather, Oscar, is 10888824"
+ages = re.findall(r'\d{1,3}',exampleString)
+names = re.findall(r'[A-Z][a-z]*',exampleString)
+
+print(ages)
+print(names)
+ --output --maximuam 1 to 3 digit number displated and it will split into next number for morethan 3 digit
+ 
+ ['15', '27', '97', '108', '888', '24']
+['Jessica', 'Daniel', 'Edward', 'Oscar']
