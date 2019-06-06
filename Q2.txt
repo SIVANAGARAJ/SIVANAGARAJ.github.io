@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<data>
+    <person name="AAA" >
+        <email_id>aaa@sys.com</email_id>
+        <contact>555-1234</contact>
+    </person>
+    <person name="BBB" >
+        <email_id>bbb@sys.com</email_id>
+    </person>    
+    <person name="CCC" >
+        <email_id>ccc@sys.com</email_id>
+        <contact>555-4567</contact>
+    </person>  
+    <person name="DDD" >
+        <contact>555-6472</contact>
+        <dept>
+            <role>Data Analyst</role>
+        </dept>
+    </person>      
+</data>
+ 
