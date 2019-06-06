@@ -1,0 +1,3 @@
+create table Attribute(StartTime varchar(max),EndTime varchar(max),Start_Latitude varchar(max) ,Start_Longitude varchar(max),End_Latitude varchar(max),End_Longitude varchar(max),duration varchar(max),is_Weekend varchar(max),hour_of_the_day varchar(max),distance varchar(max))
+
+select * from Attribute
