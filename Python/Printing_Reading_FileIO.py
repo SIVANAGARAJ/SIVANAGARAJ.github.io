@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May 22 18:15:49 2019
+Created on Wed Jun  5 16:25:18 2019
+@author: hzhou
+"""
 
-@author: Training28
+# -*- coding: utf-8 -*-
+"""
+Created on Wed May 22 18:15:49 2019
+@author: Training29
 """
 ### 1. Write a python program using csv.reader(csvfile, dialect='excel', **fmtparams)
 
@@ -21,7 +26,7 @@ import csv
 myData = [[5, 8, 9], ['vijay', 'ajay', 'ravi']]  
 myFile = open('example7.csv', 'w')  
 with myFile:  
-   writer = csv.writer(myFile)
+   writer = csv.writer(myFile,lineterminator='\n' )
    writer.writerows(myData)
     
 ### 3. Write a python program using csv.register_dialect(name, [dialect, ]**fmtparams)
@@ -33,27 +38,44 @@ csv.register_dialect('myDialect', delimiter='/', quoting=csv.QUOTE_NONE)
 with open('example7.csv', newline='') as myFile:  
    reader = csv.reader(myFile, dialect='myDialect')
    for row in reader:
-       print(row
+       print(row)
 
 
 ### 4. Write a python program using csv.unregister_dialect(name)
        
-import csv
- 
+import csv 
 csv.register_dialect("comma", delimiter=",")
+with open('example7.csv', newline='') as myFile:  
+   reader = csv.reader(myFile, dialect='comma')
+   for row in reader:
+       print(row)
 csv.unregister_dialect('comma')
 
 ### 5.Write a python program using csv.get_dialect
+csv.register_dialect("comma", delimiter=",")
+dialect=csv.get_dialect('comma')
+with open('example7.csv', newline='') as myFile:  
+   reader = csv.reader(myFile, dialect=dialect)
+   for row in reader:
+       print(row)
 
-csv.get_dialect('mydialect')
+
 
 ### 6.Write a python program using csv.list_dialects()
 
-csv.list_dialects() ## returns a list of all the dialects its a direct program in itself
+for list in csv.list_dialects():
+    print(list)
+ ## returns a list of all the dialects its a direct program in itself
 
 ### 7.Write a python program using csv.field_size_limit([new_limit])
-
+import csv 
 csv.field_size_limit(200)
+csv.register_dialect("delimeter", delimiter="/")
+with open('delimeter.csv', newline='') as myFile:  
+   reader = csv.reader(myFile, dialect='delimeter')
+   for row in reader:
+       print(row)
+
 
 ### 8.Write a python program using csv.QUOTE_ALL
 csv.register_dialect('mydialect',delimiter=',',quoting=csv.QUOTE_ALL,skipinitialspace=True) # used in registering of dialect
@@ -101,15 +123,26 @@ print(txtfile.readlines())
 txtfile.close()
 
 ### 13.Write a Python program to read last n lines of a file.
+def read_Last_Line(txtfile):
+    with open(txtfile, 'r') as f:
+        lines = f.read().splitlines()
+        last_line = lines[-1]
+        print (last_line)
+read_Last_Line('vijay.txt')
 
 
 ### 14.Write a Python program to read a file line by line and store it into a list.
 
-def read_line(txtfile):
-    with open (txtfile) as txt:
-        txt_block=txt.readlines()
-        print(txt_block)
-read_line('vijay.txt')
+
+def read_line_list(txtfile):
+    list=[]
+    with open(txtfile) as txt:
+        for line in txt:
+            list.append(line)
+        print(list)
+        
+read_line_list('vijay.txt')        
+
 
 
 ### 15.Write a Python program to read a file line by line store it into a variable
@@ -120,6 +153,10 @@ def read_line1(txtfile):
         print(txt_block)
 read_line1('vijay.txt')
 
+
+List = ['GeeksForGeeks'] 
+print("\nList with the use of String: ") 
+print(List) 
 
 
 ## 16.Write a Python program to read a file line by line store it into an array.
@@ -151,6 +188,7 @@ def linesintxt(txt):
             pass
     return i + 1
 print('the no of lines in text',linesintxt('vijay.txt'))
+ 
             
 
 ### 19.Write a Python program to count the frequency of words in a file
@@ -170,16 +208,19 @@ print(filesize.st_size)
 ### 21.Write a Python program to write a list to a file.
 
 list=['abc','dcf','res','qwe']
+
 with open('vijaynew.txt','w') as txt:
-    for l in list:
-        txt.write('%s\n'% l)
+    for value in list:
+        txt.write('%s\n'% value)
+        
 check=open('vijaynew.txt')
 print(check.read())      
 
 ### 22.Write a Python program to copy the contents of a file to another file
 
-import os
-os.popen('abc.csv dca.csv')
+with open("vijay.txt") as f:
+    with open("out.txt", "w") as f1:       
+            f1.writelines(f.read())
 
 
 ### 23.Write a Python program to combine each line from first file with the corresponding line in
@@ -212,3 +253,4 @@ def remove_lines(file):
     return [s.rstrip('\n') for s in f]
 
 print(remove_lines('vijay.txt'))
+
