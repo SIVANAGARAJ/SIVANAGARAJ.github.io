@@ -48,9 +48,9 @@ import sqlalchemy
 import urllib
 quoted = urllib.parse.quote_plus('Driver={SQL Server Native Client 11.0};'
                 'Server=ssintr02;'
-                'Database=;'
-                'uid=;'
-                'pwd=;')
+                'Database=T5_Vijayakumar;'
+                'uid=T5_Vijayakumar;'
+                'pwd=vijay207$;')
 engine=sqlalchemy.create_engine('mssql+pyodbc:///?odbc_connect={}'.format(quoted))
 df.to_sql('Workshop_Python',con=engine,if_exists='replace',index=False)
 
@@ -66,7 +66,7 @@ df.to_sql('Workshop_Python',con=engine,if_exists='replace',index=False)
 import xml.etree.ElementTree as et 
 import pandas as pd
 import xmltodict, json
-with open(r'C:\Users\Training28\Workshop\ex.txt') as fd:
+with open(r'C:\Users\Training29\python\Q2.txt') as fd:
     doc = xmltodict.parse(fd.read())
 
 print(xmltodict.unparse(doc,encoding='utf-8', full_document=True))
@@ -114,13 +114,13 @@ import sqlalchemy
 import urllib
 quoted = urllib.parse.quote_plus('Driver={SQL Server Native Client 11.0};'
                 'Server=ssintr02;'
-                'Database=T5_Padmanabh;'
-                'uid=T5_Padmanabh;'
-                'pwd=Bills@275;')
+                'Database=Northwind;'
+                'uid=T5_Vijayakumar;'
+                'pwd=vijay207$;')
 engine=sqlalchemy.create_engine('mssql+pyodbc:///?odbc_connect={}'.format(quoted))
-sql='select * from python_ord '
+sql='select * from Orders'
 order=pd.read_sql(sql,engine)
-sql='select * from python_ord_det'
+sql='select * from Order_Details'
 order_det=pd.read_sql(sql,engine)
 order
 order_det
