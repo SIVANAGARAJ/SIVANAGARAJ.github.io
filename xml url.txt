@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/49473862/heavily-nested-xml-to-csv-using-python
+
+https://stackoverflow.com/questions/54568792/how-to-convert-a-namespace-nested-xml-to-csv
