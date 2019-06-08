@@ -36,5 +36,5 @@ print(nparray)
 #c
 import numpy as np
 import pandas as pd
-dataset = pd.DataFrame({'A':nparray[:,0],'B':nparray[:,1]},)
+dataset = pd.DataFrame({'A':nparray[:,0],'B':nparray[:,1]},index=nparray[:,0]+nparray[:,1])
 print(dataset)
