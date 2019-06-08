@@ -13,7 +13,7 @@ def NumberOfOccur(test_str,letter):
             count = count + 1
     return count;
 
-NumberOfOccur('siva','a')
+ 
 
 
 dict={}
